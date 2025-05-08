@@ -1,34 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hiển thị Bản đồ với Leaflet</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Link CSS Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        #map { height: 500px; width: 100%; }
-    </style>
+  <title>Polygon cho Trường CĐCĐ Cà Mau</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 600px;
+    }
+  </style>
 </head>
 <body>
-    <h3>Bản đồ Trường Cao đẳng Cộng đồng Cà Mau</h3>
-    <div id="map"></div>
+  <h3>Bản đồ Trường CĐCĐ Cà Mau</h3>
+  <div id="map"></div>
+  
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Tạo bản đồ và đặt tâm tại vị trí Cà Mau
+    var map = L.map('map').setView([9.1763, 105.1500], 17); // Có thể thay đổi zoom nếu cần
 
-    <!-- Link JS Leaflet -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // Khởi tạo map, đặt tọa độ và zoom mặc định
-        var map = L.map('map').setView([9.18060, 105.16363], 13); // TOA DO TRUONG CAO DANG CONG CA MAU
+    // Thêm tile layer từ OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 20,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-        // Load tiles từ OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+    // Tọa độ giả định của đa giác xung quanh Trường CĐCĐ Cà Mau (cần thay bằng tọa độ thật nếu có)
+    var polygonCoords = [
+      [9.1768, 105.1495],
+      [9.1766, 105.1507],
+      [9.1759, 105.1506],
+      [9.1757, 105.1496],
+      [9.1768, 105.1495] // đóng polygon
+    ];
 
-        // Thêm marker
-        L.marker([9.18060, 105.16363]).addTo(map)
-            .bindPopup('TP. CÀ MAU')
-            .openPopup();
-    </script>
+    // Tạo polygon
+    var polygon = L.polygon(polygonCoords, {
+      color: 'green',        // màu đường viền
+      weight: 6,             // độ rộng đường viền
+      opacity: 0.8,          // độ trong suốt của đường viền
+      fillColor: 'red',      // màu nền bên trong
+      fillOpacity: 0.5       // độ trong suốt nền bên trong
+    }).addTo(map);
+
+    // Thêm tooltip
+    polygon.bindTooltip("Trường CĐCĐ Cà Mau", {
+      permanent: false,
+      direction: "top"
+    });
+
+    // Tự động zoom vào polygon
+    map.fitBounds(polygon.getBounds());
+  </script>
 </body>
 </html>
