@@ -1,57 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Trường CĐCĐ Cà Mau - Polygon</title>
+  <title>Bản đồ Tượng đài Cà Mau</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
   <style>
     #map {
-      height: 600px;
+      height: 500px;
     }
   </style>
 </head>
 <body>
-  <h3>Bản đồ Trường CĐCĐ Cà Mau</h3>
-  <div id="map"></div>
-  
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    // Tạo bản đồ và đặt tâm tại Trường CĐCĐ Cà Mau
-    var map = L.map('map').setView([9.18060, 105.16363], 18);
 
-    // Tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 20,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+<div id="map"></div>
 
-    // Đa giác đơn giản quanh vị trí trường (bạn có thể điều chỉnh toạ độ để chính xác hơn nếu muốn)
-    var polygonCoords = [
-      [9.18090, 105.16320],
-      [9.18090, 105.16400],
-      [9.18030, 105.16400],
-      [9.18030, 105.16320],
-      [9.18090, 105.16320] // đóng đa giác
-    ];
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // Tọa độ Tượng đài Cà Mau (ước lượng gần đúng)
+  const tuongDaiCaMau = [9.176663, 105.152833];
 
-    // Tạo polygon
-    var polygon = L.polygon(polygonCoords, {
-      color: 'green',
-      weight: 6,
-      opacity: 0.8,
-      fillColor: 'red',
-      fillOpacity: 0.5
-    }).addTo(map);
+  // Khởi tạo bản đồ
+  const map = L.map('map').setView(tuongDaiCaMau, 17);
 
-    // Thêm tooltip khi di chuột vào
-    polygon.bindTooltip("Trường CĐCĐ Cà Mau", {
-      permanent: false,
-      direction: "top"
-    });
+  // Lớp tile
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
 
-    // Tự động zoom vào vùng đa giác
-    map.fitBounds(polygon.getBounds());
-  </script>
+  // Thêm Marker
+  const marker = L.marker(tuongDaiCaMau).addTo(map);
+  marker.bindPopup("Tượng đài Cà Mau").openPopup();
+
+  // Vẽ đường tròn bán kính 60m (đường kính 120m)
+  const circle = L.circle(tuongDaiCaMau, {
+    radius: 60, // bán kính (m)
+    color: 'red', // viền
+    fillColor: 'lightblue', // nền
+    fillOpacity: 0.4
+  }).addTo(map);
+</script>
+
 </body>
 </html>
